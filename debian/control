@@ -2,7 +2,7 @@ Source: saa716x-dkms
 Section: misc
 Priority: optional
 Maintainer: mnival <mn-debian@mn-home.fr>
-Build-Depends: debhelper (= 13), dkms, libproc-processtable-perl
+Build-Depends: debhelper (>= 13), dh-sequence-dkms
 Standards-Version: 4.6.0
 Homepage: https://github.com/mnival/saa716x-dkms
 Vcs-Browser: https://github.com/mnival/saa716x-dkms
@@ -12,7 +12,7 @@ Testsuite: autopkgtest-pkg-dkms
 
 Package: saa716x-dkms
 Architecture: all
-Depends: dkms (>= 1.95), ${misc:Depends}
+Depends: dkms (>= 2.1.0.0)
 Conflicts: s2-liplianin-dkms, v4l-dvb-dkms, linux-tbs-drivers-dkms, linux-media-tbs-dkms, linux-media-dkms, media-build-experimental-dkms, dddvb-dkms
 Replaces: s2-liplianin-dkms, v4l-dvb-dkms, linux-tbs-drivers-dkms, linux-media-tbs-dkms, linux-media-dkms, media-build-experimental-dkms, dddvb-dkms
 Description: saa716x drivers in DKMS format.
