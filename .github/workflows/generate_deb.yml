@@ -17,12 +17,12 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v3
         with:
-          context: ./github/docker/
+          context: ./.github/docker/
           platforms: linux/amd64
           push: false
-          tags: latest
-          cache-from: debian-build:latest
-          cache-to: type=inline
+          tags: debian-build:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Try images
         run: |
