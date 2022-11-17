@@ -12,10 +12,22 @@ jobs:
       contents: read
       packages: write
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Install Build-Depends and generate deb file
-      run: |
-        sudo apt update
-        sudo apt -y install devscripts debhelper dkms
-        debuild -i -us -uc -b
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: ./github/docker/
+          platforms: linux/amd64
+          push: false
+          tags: latest
+          cache-from: debian-build:latest
+          cache-to: type=inline
+
+      - name: Try images
+        run: |
+          docker images
+          docker run debian-build:latest /bin/bash -c "echo TEST"
+          ls -la
+          pwd
+          env
