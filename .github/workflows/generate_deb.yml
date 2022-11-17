@@ -31,16 +31,28 @@ jobs:
           docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "cd /usr/local/src/${GITHUB_REPO_NAME}; debuild -us -uc -b"
           ls -la ${RUNNER_WORKSPACE}
 
-      - name: Create release
+      - name: Create release and upload file
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl \
+            --fail
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
             -d '{"tag_name":"v0.0.0","target_commitish":"main","name":"v0.0.0","body":"v0.0.0","draft":false,"prerelease":false,"generate_release_notes":false}' \
             -o /tmp/curl.log
+          UPLOAD_URL="$(jq -r .upload_url /tmp/curl.log | sed 's/{.*//g')"
+          FILE="$(ls ${RUNNER_WORKSPACE}/saa716x-dkms_*_all.deb)"
+          FILE_NAME="$(basename ${FILE})"
+          curl \
+            --fail
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -T "${FILE}"
+            "${UPLOAD_URL}?name=${FILE_NAME}" \
+            -o /tmp/curl
           cat /tmp/curl.log
           jq -r . /tmp/curl.log
