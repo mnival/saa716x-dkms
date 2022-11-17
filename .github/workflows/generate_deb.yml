@@ -35,7 +35,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -x -v
           curl \
+            -s \
             --fail \
             -X POST \
             -H "Accept: application/vnd.github+json" \
@@ -47,6 +49,7 @@ jobs:
           FILE="$(ls ${RUNNER_WORKSPACE}/saa716x-dkms_*_all.deb)"
           FILE_NAME="$(basename ${FILE})"
           curl \
+            -s \
             --fail \
             -X POST \
             -H "Accept: application/vnd.github+json" \
