@@ -29,4 +29,4 @@ jobs:
         run: |
           GITHUB_REPO_NAME="${GITHUB_REPOSITORY#*/}"
           docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "cd /usr/local/src/${GITHUB_REPO_NAME}; debuild -us -uc -b"
-          docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "dpkg -i /usr/local/src/saa716x-dkms_*_all.deb || (cat /var/lib/dkms/saa716x/*/build/make.log; exit 1) && modinfo saa716x_core"
+          docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "dpkg -i /usr/local/src/saa716x-dkms_*_all.deb || (cat /var/lib/dkms/saa716x/*/build/make.log; exit 1) && modinfo /lib/modules/*/updates/dkms/saa716x_core.ko"
