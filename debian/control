@@ -2,7 +2,7 @@ Source: saa716x-dkms
 Section: misc
 Priority: optional
 Maintainer: mnival <mn-debian@mn-home.fr>
-Build-Depends: debhelper (>= 13), dh-sequence-dkms
+Build-Depends: debhelper (>= 13), dkms
 Standards-Version: 4.6.0
 Homepage: https://github.com/mnival/saa716x-dkms
 Vcs-Browser: https://github.com/mnival/saa716x-dkms
