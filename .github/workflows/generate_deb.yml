@@ -31,6 +31,7 @@ jobs:
       - name: Try images
         run: |
           docker images
+          docker run debian-build:latest /bin/bash -c "echo OK"
           ls -la
           pwd
           env
