@@ -26,11 +26,11 @@ jobs:
           tags: debian-build:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          outputs: type=image
 
       - name: Try images
         run: |
           docker images
-          docker run debian-build:latest /bin/bash -c "echo TEST"
           ls -la
           pwd
           env
