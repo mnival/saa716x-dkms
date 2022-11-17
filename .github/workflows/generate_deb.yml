@@ -29,7 +29,6 @@ jobs:
         run: |
           GITHUB_REPO_NAME="${GITHUB_REPOSITORY#*/}"
           docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "cd /usr/local/src/${GITHUB_REPO_NAME}; debuild -us -uc -b"
-          ls -la ${RUNNER_WORKSPACE}
 
       - name: Create release and upload file
         env:
