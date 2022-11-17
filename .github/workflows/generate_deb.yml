@@ -16,6 +16,6 @@ jobs:
 
     - name: Install Build-Depends and generate deb file
       run: |
-        apt update
-        apt -y install devscripts debhelper dh-sequence-dkms
+        sudo apt update
+        sudo apt -y install devscripts debhelper dh-sequence-dkms
         debuild -i -us -uc -b
