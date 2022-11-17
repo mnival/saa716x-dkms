@@ -1,0 +1,32 @@
+name: Generate and test deb file
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: ./.github/docker/
+          platforms: linux/amd64
+          push: false
+          tags: debian-build:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=docker
+
+      - name: Generate deb file
+        run: |
+          GITHUB_REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "cd /usr/local/src/${GITHUB_REPO_NAME}; debuild -us -uc -b"
+          docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "dpkg -i /usr/local/src/saa716x-dkms_*_all.deb && modinfo saa716x_core"
