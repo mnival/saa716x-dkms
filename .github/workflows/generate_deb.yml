@@ -28,8 +28,22 @@ jobs:
           cache-to: type=gha,mode=max
           outputs: type=docker
 
-      - name: Try images
+      - name: Generate deb file
         run: |
           GITHUB_REPO_NAME="${GITHUB_REPOSITORY#*/}"
           docker run -v "${RUNNER_WORKSPACE}:/usr/local/src" debian-build:latest /bin/bash -c "cd /usr/local/src/${GITHUB_REPO_NAME}; debuild -us -uc -b"
           ls -la ${RUNNER_WORKSPACE}
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
+            -d '{"tag_name":"v0.0.0","target_commitish":"main","name":"v0.0.0","body":"v0.0.0","draft":false,"prerelease":false,"generate_release_notes":false}' \
+            -o /tmp/curl.log
+          cat /tmp/curl.log
+          jq -r . /tmp/curl.log
