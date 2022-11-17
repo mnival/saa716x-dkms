@@ -49,10 +49,12 @@ jobs:
           FILE="$(ls ${RUNNER_WORKSPACE}/saa716x-dkms_*_all.deb)"
           FILE_NAME="$(basename ${FILE})"
           curl \
-            -s \
+            -s -v \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Content-Type: $(file -b --mime-type ${FILE})" \
+            -H "Content-Length: $(wc -c <${FILE} | xargs)" \
             -T "${FILE}" \
             "${UPLOAD_URL}?name=${FILE_NAME}" \
             -o /tmp/curl
