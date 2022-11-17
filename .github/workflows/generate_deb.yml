@@ -2,8 +2,8 @@ name: Generate deb file
 
 on:
   push:
-    branches: 
-    - main
+    tags:
+      - 'v*'
 
 jobs:
   build-push:
@@ -35,7 +35,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -x -v
           curl \
             -s \
             --fail \
@@ -43,20 +42,28 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
-            -d '{"tag_name":"v0.0.0","target_commitish":"main","name":"v0.0.0","body":"v0.0.0","draft":false,"prerelease":false,"generate_release_notes":false}' \
+            -d '{"tag_name":"${{  github.ref_name }}","target_commitish":"main","name":"${{  github.ref_name }}","body":"${{  github.ref_name }}","draft":false,"prerelease":false,"generate_release_notes":false}' \
             -o /tmp/curl.log
           UPLOAD_URL="$(jq -r .upload_url /tmp/curl.log | sed 's/{.*//g')"
           FILE="$(ls ${RUNNER_WORKSPACE}/saa716x-dkms_*_all.deb)"
           FILE_NAME="$(basename ${FILE})"
           curl \
-            -s -v \
+            -s \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             -H "Content-Type: $(file -b --mime-type ${FILE})" \
             -H "Content-Length: $(wc -c <${FILE} | xargs)" \
             -T "${FILE}" \
-            "${UPLOAD_URL}?name=${FILE_NAME}" \
-            -o /tmp/curl
-          cat /tmp/curl.log
-          jq -r . /tmp/curl.log
+            "${UPLOAD_URL}?name=${FILE_NAME}"
+          FILE="$(ls ${RUNNER_WORKSPACE}/saa716x-dkms_*_amd64.build)"
+          FILE_NAME="$(basename ${FILE})"
+          curl \
+            -s \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Content-Type: $(file -b --mime-type ${FILE})" \
+            -H "Content-Length: $(wc -c <${FILE} | xargs)" \
+            -T "${FILE}" \
+            "${UPLOAD_URL}?name=${FILE_NAME}"
