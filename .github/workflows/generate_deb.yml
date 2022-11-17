@@ -45,7 +45,7 @@ jobs:
             -o /tmp/curl.log
           UPLOAD_URL="$(jq -r .upload_url /tmp/curl.log | sed 's/{.*//g')"
           FILE="$(ls ${RUNNER_WORKSPACE}/saa716x-dkms_*_all.deb)"
-          FILE_NAME="$(basename ${FILE})"
+          FILE_NAME="saa716x-dkms_all.deb"
           curl \
             -s \
             -X POST \
