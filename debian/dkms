@@ -1,9 +1,6 @@
 PACKAGE_NAME="saa716x"
 PACKAGE_VERSION="#MODULE_VERSION#"
 AUTOINSTALL="yes"
-#MAKE="make VER=${kernelver} KERNEL_SRC=${kernel_source_dir} REVISION=$PACKAGE_VERSION"
-MAKE="make modules"
-CLEAN="make clean"
 BUILT_MODULE_NAME[0]="saa716x_budget"
 BUILT_MODULE_NAME[1]="saa716x_core"
 BUILT_MODULE_NAME[2]="saa716x_ff"
@@ -12,8 +9,3 @@ DEST_MODULE_LOCATION[0]=/kernel/drivers/media/pci/saa716x
 DEST_MODULE_LOCATION[1]=/kernel/drivers/media/pci/saa716x
 DEST_MODULE_LOCATION[2]=/kernel/drivers/media/pci/saa716x
 DEST_MODULE_LOCATION[3]=/kernel/drivers/media/pci/saa716x
-
-#BUILT_MODULE_NAME[0]="ovpn-dco"
-#BUILT_MODULE_LOCATION[0]="drivers/net/ovpn-dco"
-#DEST_MODULE_LOCATION[0]="/kernel/drivers/net/ovpn-dco"
-

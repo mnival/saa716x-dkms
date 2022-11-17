@@ -20,11 +20,3 @@ obj-m	  += saa716x_ff.o
 
 ccflags-y += -Idrivers/media/dvb-frontends/
 ccflags-y += -Idrivers/media/tuners
-
-KVERSION := $(shell uname -r)
-
-modules:
-	$(MAKE) -C /lib/modules/$(KVERSION)/build M=$(PWD) modules
-
-clean:
-	$(MAKE) -C /lib/modules/$(KVERSION)/build M=$(PWD) clean
